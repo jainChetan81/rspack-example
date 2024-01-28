@@ -1,6 +1,9 @@
 import path from "path";
 import { renderToString } from "react-dom/server";
-import { StaticRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+import { CompatRouter } from "react-router-dom-v5-compat";
+import { ServerRouter } from "react-router-dom";
+
 import { renderRoutes, matchRoutes } from "react-router-config";
 import { Provider } from "react-redux";
 import { ChunkExtractor } from "@loadable/server";
@@ -69,9 +72,9 @@ export default async (
     const App = extractor.collectChunks(
       <Provider store={store}>
         {/* Setup React-Router server-side rendering */}
-        <StaticRouter location={req.path} context={staticContext}>
+        <ServerRouter location={req.path} context={staticContext}>
           {renderRoutes(routes)}
-        </StaticRouter>
+        </ServerRouter>
       </Provider>
     );
 
