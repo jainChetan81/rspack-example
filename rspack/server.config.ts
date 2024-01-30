@@ -2,6 +2,7 @@ import path from "path";
 import rspack, { Configuration } from "@rspack/core";
 import nodeExternals from "webpack-node-externals";
 import merge from "webpack-merge";
+const CopyPlugin = require("copy-webpack-plugin");
 
 import baseConfig, { isDev } from "./base.config";
 
@@ -29,27 +30,27 @@ const config: Configuration = {
 			banner: 'require("source-map-support").install();',
 			raw: true
 		}),
-		new rspack.CopyRspackPlugin({
+		new CopyPlugin({
+			// FIXME: This is stuck in the build process
 			patterns: [
-				// TODO: not working
-				// {
-				// 	from: "src/components/**/assets/*.*",
-				// 	to({ absoluteFilename }: any) {
-				// 		return `../assets/images/components/${absoluteFilename.split("src/components/")[1]}`;
-				// 	}
-				// },
-				// {
-				// 	from: "src/pages/**/assets/*.*",
-				// 	to({ absoluteFilename }: any) {
-				// 		return `../assets/images/pages/${absoluteFilename.split("src/pages/")[1]}`;
-				// 	}
-				// },
-				// {
-				// 	from: "src/app/**/assets/*.*",
-				// 	to({ absoluteFilename }: any) {
-				// 		return `../assets/images/app/${absoluteFilename.split("src/app/")[1]}`;
-				// 	}
-				// },
+				{
+					from: "src/components/**/assets/*.*",
+					to({ absoluteFilename }: any) {
+						return `../assets/images/components/${absoluteFilename.split("src/components/")[1]}`;
+					}
+				},
+				{
+					from: "src/pages/**/assets/*.*",
+					to({ absoluteFilename }: any) {
+						return `../assets/images/pages/${absoluteFilename.split("src/pages/")[1]}`;
+					}
+				},
+				{
+					from: "src/app/**/assets/*.*",
+					to({ absoluteFilename }: any) {
+						return `../assets/images/app/${absoluteFilename.split("src/app/")[1]}`;
+					}
+				}
 			]
 		})
 	]

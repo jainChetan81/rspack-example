@@ -2,6 +2,7 @@ import path from "path";
 import webpack, { Configuration } from "webpack";
 import nodeExternals from "webpack-node-externals";
 import merge from "webpack-merge";
+// @ts-ignore
 import CopyWebpackPlugin from "copy-webpack-plugin";
 
 import baseConfig, { isDev } from "./base.config";
