@@ -1,6 +1,5 @@
 import LoadablePlugin from "@loadable/webpack-plugin";
 import rspack, { Configuration, RspackPluginInstance, RuleSetUseItem } from "@rspack/core";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import path from "path";
 import { WebpackManifestPlugin } from "rspack-manifest-plugin";
 
@@ -50,13 +49,6 @@ const getPlugins = (isWeb: boolean) => {
 			__DEV__: isDev
 		})
 	];
-
-	if (isDev)
-		plugins = [
-			...plugins,
-			// Runs TypeScript type checker on a separate process
-			false && new ForkTsCheckerWebpackPlugin()
-		].filter(Boolean);
 
 	return plugins;
 };
