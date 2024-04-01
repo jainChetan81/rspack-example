@@ -4,9 +4,8 @@ import chalk from "chalk";
 import config from "../config";
 
 export default (app: Express): void => {
-	const isRspack = process.env.RSPACK;
-	const webpack = isRspack ? require("@rspack/core") : require("webpack");
-	const webpackConfig = require(`../../${isRspack ? "rspack" : "webpack"}/client.config`).default;
+	const webpack = require("@rspack/core");
+	const webpackConfig = require(`../../rspack/client.config`).default;
 	const compiler = webpack(webpackConfig);
 	const instance = require("webpack-dev-middleware")(compiler, {
 		headers: { "Access-Control-Allow-Origin": "*" },
