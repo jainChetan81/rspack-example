@@ -1,5 +1,4 @@
 import { Express } from "express";
-import chalk from "chalk";
 
 import config from "../config";
 
@@ -23,6 +22,6 @@ export default (app: Express): void => {
 
 	instance.waitUntilValid(() => {
 		const url = `http://${config.HOST}:${config.PORT}`;
-		console.info(chalk.green(`==> 🌎  Listening at ${url}`));
+		console.info(`==> 🌎  Listening at ${url}`);
 	});
 };

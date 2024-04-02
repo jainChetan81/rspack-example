@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import express from "express";
 import logger from "morgan";
 import path from "path";
@@ -25,5 +24,5 @@ app.get("*", ssr);
 
 // @ts-expect-error
 app.listen(config.PORT, config.HOST, (error) => {
-	if (error) console.error(chalk.red(`==> 😭  OMG!!! ${error}`));
+	if (error) console.error(`==> 😭  OMG!!! ${error}`);
 });

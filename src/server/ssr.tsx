@@ -5,7 +5,6 @@ import { renderRoutes, matchRoutes } from "react-router-config";
 import { Provider } from "react-redux";
 import { ChunkExtractor } from "@loadable/server";
 import { Helmet } from "react-helmet";
-import chalk from "chalk";
 import { Request, Response, NextFunction } from "express";
 import { Action } from "@reduxjs/toolkit";
 import NodeFS from "node:fs/promises";
@@ -96,7 +95,7 @@ export default async (
       .send(renderHtml(head, extractor, htmlContent, initialState));
   } catch (error) {
     res.status(404).send("Not Found :(");
-    console.error(chalk.red(`==> 😭  Rendering routes error: ${error}`));
+    console.error(`==> 😭  Rendering routes error: ${error}`);
   }
 
   next();
