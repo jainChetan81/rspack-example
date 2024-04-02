@@ -3,13 +3,8 @@ import { HelmetData } from "react-helmet";
 import serialize from "serialize-javascript";
 import { minify } from "html-minifier";
 
-export default (
-  head: HelmetData,
-  extractor: ChunkExtractor,
-  htmlContent: string,
-  initialState: typeof window.__INITIAL_STATE__
-): any => {
-  const html = `
+export default (head: HelmetData, extractor: ChunkExtractor, htmlContent: string): any => {
+	const html = `
     <!doctype html>
     <html ${head.htmlAttributes.toString()}>
       <head>
@@ -34,13 +29,6 @@ export default (
         <!-- Insert the router, which passed from server-side -->
         <div id="react-view">${htmlContent}</div>
 
-        <!-- Store the initial state into window -->
-        <script>
-          // Use serialize-javascript for mitigating XSS attacks. See the following security issues:
-          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
-          window.__INITIAL_STATE__=${serialize(initialState)};
-        </script>
-
         <!-- Insert bundled scripts into <script> tag -->
         ${extractor.getScriptTags()}
         ${head.script.toString()}
@@ -48,16 +36,16 @@ export default (
     </html>
   `;
 
-  // html-minifier configuration, refer to "https://github.com/kangax/html-minifier" for more configuration
-  const minifyConfig = {
-    collapseWhitespace: true,
-    removeComments: true,
-    trimCustomFragments: true,
-    minifyCSS: true,
-    minifyJS: true,
-    minifyURLs: true,
-  };
+	// html-minifier configuration, refer to "https://github.com/kangax/html-minifier" for more configuration
+	const minifyConfig = {
+		collapseWhitespace: true,
+		removeComments: true,
+		trimCustomFragments: true,
+		minifyCSS: true,
+		minifyJS: true,
+		minifyURLs: true
+	};
 
-  // Minify HTML in production
-  return __DEV__ ? html : minify(html, minifyConfig);
+	// Minify HTML in production
+	return __DEV__ ? html : minify(html, minifyConfig);
 };

@@ -1,38 +1,46 @@
-import { useEffect, memo } from "react";
+import { useEffect, memo, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { Helmet } from "react-helmet";
 
-import { AppState, AppThunk } from "../../store";
-import { User } from "../../services/jsonPlaceholder";
-import { fetchUserDataIfNeed } from "../../store/userData";
+import { User, getUserData } from "../../services/jsonPlaceholder";
 import { Info } from "../../components";
 import styles from "./styles.module.scss";
 
 export type Props = RouteComponentProps<{ id: string }>;
-
+interface UserDate {
+  [id: string]: {
+    readyStatus: string;
+    item?: User;
+    error?: string;
+  };
+}
 const UserInfo = ({ match }: Props): JSX.Element => {
   const { id } = match.params;
-  const dispatch = useDispatch();
-  const userData = useSelector(
-    (state: AppState) => state.userData,
-    shallowEqual
-  );
+  const [userData, setUserData] = useState<User | null>()
+  const [readyStatus, setReadyStatus] = useState<"request" | "failure" | "success">("request")
 
+  async function fetchO() {
+    const { data, error } = await getUserData(id);
+    if (error || !data) {
+      return setReadyStatus("failure")
+    }
+    setReadyStatus("success")
+    setUserData(data)
+  }
   useEffect(() => {
-    dispatch(fetchUserDataIfNeed(id));
-  }, [dispatch, id]);
+    fetchO()
+  }, [id]);
 
   const renderInfo = () => {
-    const userInfo = userData[id];
 
-    if (!userInfo || userInfo.readyStatus === "request")
+    if (!userData || readyStatus === "request")
       return <p>Loading...</p>;
 
-    if (userInfo.readyStatus === "failure")
+    if (readyStatus === "failure")
       return <p>Oops! Failed to load data.</p>;
+    const userInfo = userData;
 
-    return <Info item={userInfo.item as User} />;
+    return <Info item={userInfo as User} />;
   };
 
   return (
@@ -43,12 +51,5 @@ const UserInfo = ({ match }: Props): JSX.Element => {
   );
 };
 
-interface LoadDataArgs {
-  params: { id: string };
-}
-
-export const loadData = ({ params }: LoadDataArgs): AppThunk[] => [
-  fetchUserDataIfNeed(params.id),
-];
 
 export default memo(UserInfo);
