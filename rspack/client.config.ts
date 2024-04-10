@@ -19,7 +19,16 @@ const config: Configuration = {
 	optimization: {
 		minimizer: [new rspack.SwcCssMinimizerRspackPlugin({ parallel: true, cache: true })]
 	},
-	plugins: [new rspack.HotModuleReplacementPlugin(), isDev && new ReactRefreshPlugin()].filter(Boolean)
+	plugins: [
+		new rspack.CssExtractRspackPlugin({
+			// Don't use hash in development, we need the persistent for "renderHtml.ts"
+			filename: isDev ? "css/[name].css" : "css/[name].[contenthash].css",
+			chunkFilename: isDev ? "css/[id].css" : "css/[id].[contenthash].css",
+			ignoreOrder: true
+		}),
+		new rspack.HotModuleReplacementPlugin(),
+		isDev && new ReactRefreshPlugin()
+	].filter(Boolean)
 };
 
 export default merge(baseConfig(true), config);

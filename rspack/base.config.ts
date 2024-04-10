@@ -5,9 +5,21 @@ import { WebpackManifestPlugin } from "rspack-manifest-plugin";
 
 export const isDev = process.env.NODE_ENV === "development";
 
-const getStyleLoaders = (isSass?: boolean) => {
-	let loaders: RuleSetUseItem[] = [{ loader: "postcss-loader" }];
-
+const getStyleLoaders = (isWeb: boolean, isSass?: boolean) => {
+	let loaders: RuleSetUseItem[] = [
+		{
+			loader: "css-loader",
+			options: {
+				importLoaders: isSass ? 2 : 1,
+				modules: {
+					localIdentName: "[name]__[local]",
+					exportOnlyLocals: !isWeb
+				}
+			}
+		},
+		{ loader: "postcss-loader" }
+	];
+	if (isWeb) loaders = [rspack.CssExtractRspackPlugin.loader, ...loaders];
 	if (isSass)
 		loaders = [
 			...loaders,
@@ -57,17 +69,10 @@ const config = (isWeb = false): Configuration => ({
 	mode: isDev ? "development" : "production",
 	stats: "normal",
 	context: path.resolve(process.cwd()),
+	experiments: { css: false },
 	output: { clean: true },
 	optimization: { minimizer: [new rspack.SwcJsMinimizerRspackPlugin({ dropConsole: true })] },
 	plugins: getPlugins(isWeb) as RspackPluginInstance[],
-	builtins: {
-		css: {
-			modules: {
-				localIdentName: "[name]__[local]",
-				exportsOnly: !isWeb
-			}
-		}
-	},
 	module: {
 		rules: [
 			{
@@ -82,13 +87,11 @@ const config = (isWeb = false): Configuration => ({
 			},
 			{
 				test: /\.css$/,
-				use: getStyleLoaders(),
-				type: "css/module"
+				use: getStyleLoaders(isWeb),
 			},
 			{
 				test: /\.(scss|sass)$/,
-				use: getStyleLoaders(true),
-				type: "css/module"
+				use: getStyleLoaders(isWeb, true),
 			},
 			{
 				test: /\.(woff2?|eot|ttf|otf)$/i,
