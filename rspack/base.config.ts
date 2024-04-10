@@ -71,7 +71,19 @@ const config = (isWeb = false): Configuration => ({
 	context: path.resolve(process.cwd()),
 	experiments: { css: false },
 	output: { clean: true },
-	optimization: { minimizer: [new rspack.SwcJsMinimizerRspackPlugin({ dropConsole: true })] },
+	optimization: {
+		minimizer: [new rspack.SwcJsMinimizerRspackPlugin({ dropConsole: true })],
+		splitChunks: {
+			chunks: "all",
+			cacheGroups: {
+				vendor: {
+					test: /[\\/]node_modules[\\/](react|react-dom|react-router)[\\/]/,
+					name: "vendor",
+					chunks: "all"
+				}
+			}
+		}
+	},
 	plugins: getPlugins(isWeb) as RspackPluginInstance[],
 	module: {
 		rules: [
@@ -87,11 +99,11 @@ const config = (isWeb = false): Configuration => ({
 			},
 			{
 				test: /\.css$/,
-				use: getStyleLoaders(isWeb),
+				use: getStyleLoaders(isWeb)
 			},
 			{
 				test: /\.(scss|sass)$/,
-				use: getStyleLoaders(isWeb, true),
+				use: getStyleLoaders(isWeb, true)
 			},
 			{
 				test: /\.(woff2?|eot|ttf|otf)$/i,
