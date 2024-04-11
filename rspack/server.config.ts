@@ -6,7 +6,7 @@ import merge from "webpack-merge";
 import baseConfig, { isDev } from "./base.config";
 
 const config: Configuration = {
-	target: "node",
+	externalsPresets: { node: true },
 	devtool: isDev ? "inline-source-map" : "source-map",
 	entry: "./src/server",
 	output: {
