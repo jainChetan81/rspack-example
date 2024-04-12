@@ -4,6 +4,7 @@ import path from "path";
 import { WebpackManifestPlugin } from "rspack-manifest-plugin";
 
 export const isDev = process.env.NODE_ENV === "development";
+import LightningCSS from "lightningcss";
 
 const getStyleLoaders = (isWeb: boolean, isSass?: boolean) => {
 	let loaders: RuleSetUseItem[] = [
@@ -17,7 +18,12 @@ const getStyleLoaders = (isWeb: boolean, isSass?: boolean) => {
 				}
 			}
 		},
-		{ loader: "postcss-loader" }
+		{
+			loader: "lightningcss-loader",
+			options: {
+				implementation: LightningCSS
+			}
+		}
 	];
 	if (isWeb) loaders = [rspack.CssExtractRspackPlugin.loader, ...loaders];
 	if (isSass)
