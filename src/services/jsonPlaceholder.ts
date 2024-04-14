@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import config from "../config";
 
 export interface User {
@@ -22,7 +20,9 @@ interface UserData {
 
 export const getUserList = async (): Promise<UserList> => {
 	try {
-		const { data } = await axios.get(`${config.API_URL}/users`);
+		const res = await fetch(`${config.API_URL}/users`);
+		const data = await res.json();
+
 		return { data };
 	} catch (error) {
 		return { error: error as Error };
@@ -31,7 +31,8 @@ export const getUserList = async (): Promise<UserList> => {
 
 export const getUserData = async (id: string): Promise<UserData> => {
 	try {
-		const { data } = await axios.get(`${config.API_URL}/users/${id}`);
+		const res = await fetch(`${config.API_URL}/users/${id}`);
+		const data = await res.json();
 		return { data };
 	} catch (error) {
 		return { error: error as Error };
