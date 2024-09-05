@@ -1,6 +1,5 @@
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { ConnectedRouter } from "connected-react-router";
 import { RouteConfig, renderRoutes } from "react-router-config";
 import { loadableReady } from "@loadable/component";
 

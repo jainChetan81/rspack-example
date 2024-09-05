@@ -17,7 +17,7 @@ const config: Configuration = {
 		cssChunkFilename: isDev ? "css/[id].css" : "css/[id].[contenthash].css"
 	},
 	optimization: {
-		minimizer: [new rspack.SwcCssMinimizerRspackPlugin({ parallel: true, cache: true })]
+		minimizer: [new rspack.LightningCssMinimizerRspackPlugin()]
 	},
 	plugins: [
 		new rspack.CssExtractRspackPlugin({

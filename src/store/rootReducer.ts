@@ -1,5 +1,4 @@
 import { History } from "history";
-import { connectRouter } from "connected-react-router";
 
 import userList from "./userList";
 import userData from "./userData";
@@ -8,6 +7,5 @@ import userData from "./userData";
 export default (history: History) => ({
   userList,
   userData,
-  router: connectRouter(history) as any,
   // Register more reducers...
 });

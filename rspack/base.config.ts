@@ -78,7 +78,7 @@ const config = (isWeb = false): Configuration => ({
 	experiments: { css: false },
 	output: { clean: true },
 	optimization: {
-		minimizer: [new rspack.SwcJsMinimizerRspackPlugin({ dropConsole: true })],
+		minimizer: [new rspack.SwcJsMinimizerRspackPlugin()],
 		splitChunks: {
 			chunks: "all",
 			cacheGroups: {

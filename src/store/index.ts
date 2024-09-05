@@ -1,7 +1,6 @@
 import { createMemoryHistory, createBrowserHistory } from "history";
 import { Action, configureStore } from "@reduxjs/toolkit";
 import { ThunkAction } from "redux-thunk";
-import { routerMiddleware } from "connected-react-router";
 
 import createRootReducer from "./rootReducer";
 
@@ -18,7 +17,7 @@ const createStore = ({ initialState, url }: Arg = {}) => {
 		// @ts-ignore
 		reducer: createRootReducer(history),
 		// @ts-ignore
-		middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(), routerMiddleware(history)],
+		middleware: (getDefaultMiddleware) => [...getDefaultMiddleware()],
 		devTools: __DEV__
 	});
 
